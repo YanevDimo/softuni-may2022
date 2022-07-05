@@ -12,3 +12,10 @@ spring:
   sql:
     init:
       mode: always
+mail:
+  host: localhost
+  port: 1025
+  username: mailhog@example.com
+  password: ""
+  characterEncoding: "UTF-8"
+  protocol: smtp
