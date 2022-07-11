@@ -4,6 +4,7 @@ import bg.softuni.mobilele.model.dto.offer.AddOfferDTO;
 import bg.softuni.mobilele.model.dto.offer.SearchOfferDTO;
 import bg.softuni.mobilele.service.BrandService;
 import bg.softuni.mobilele.service.OfferService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,15 @@ public class OfferController {
     }
 
     @GetMapping("/offers/all")
-    public String allOffers() {
+    public String allOffers(
+        Model model,
+        Pageable pageable) {
+
+        var offersPage =
+            offerService.getPage(pageable);
+
+        model.addAttribute("offers", offersPage);
+
         return "offers";
     }
 

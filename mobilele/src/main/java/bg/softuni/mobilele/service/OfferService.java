@@ -9,6 +9,8 @@ import bg.softuni.mobilele.model.mapper.OfferMapper;
 import bg.softuni.mobilele.repository.ModelRepository;
 import bg.softuni.mobilele.repository.OfferRepository;
 import bg.softuni.mobilele.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +19,10 @@ import java.util.List;
 @Service
 public class OfferService {
 
-    private OfferRepository offerRepository;
-    private UserRepository userRepository;
-    private ModelRepository modelRepository;
-    private OfferMapper offerMapper;
+    private final OfferRepository offerRepository;
+    private final UserRepository userRepository;
+    private final ModelRepository modelRepository;
+    private final OfferMapper offerMapper;
 
     public OfferService(OfferRepository offerRepository,
                         UserRepository userRepository,
@@ -52,7 +54,14 @@ public class OfferService {
         return this.offerRepository
                 .findAllByModel_NameContains(query)
                 .stream()
-                .map(offer -> offerMapper.offerEntityToCardListingOfferDto(offer))
+                .map(offerMapper::offerEntityToCardListingOfferDto)
                 .toList();
     }
+
+    public Page<CardListingOfferDTO> getPage(Pageable pageable) {
+        return offerRepository.
+            findAll(pageable).
+            map(offerMapper::offerEntityToCardListingOfferDto);
+    }
+
 }
